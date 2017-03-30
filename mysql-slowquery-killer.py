@@ -13,23 +13,20 @@ T_TIME_CREATING_SORT_INDEX = 30
 
 
 def create_sql(args):
-    fragments = []
-    fragments.append("SELECT * FROM PROCESSLIST")
-    fragments.append("WHERE COMMAND = 'Query'")  # COMMANDはQuery
-    fragments.append("AND (")
 
-    # 条件
-    fragments.append("(TIME > " + str(T_TIME_STATISTICS) + " AND STATE like 'statistics%')")
-    fragments.append("OR")
-    fragments.append("(TIME > " + str(T_TIME_CREATING_SORT_INDEX) + " AND STATE = 'Creating sort index')")
-    fragments.append("OR")
-    fragments.append("(TIME > " + str(args.threshold_time) + " AND STATE like 'Sending%')")
-    fragments.append("OR")
-    fragments.append("(TIME > " + str(args.threshold_time) + " AND STATE like 'Copying%')")
+    sql = """
+    SELECT * FROM PROCESSLIST
+    WHERE COMMAND = 'Query'
+    AND (
+    (TIME > {0} AND STATE like 'statistics%') OR
+    (TIME > {1} AND STATE = 'Creating sort index') OR
+    (TIME > {2} AND STATE = 'Sending%') OR
+    (TIME > {2} AND STATE = 'Copying%')
+    )
+    """.format(str(T_TIME_STATISTICS), str(T_TIME_CREATING_SORT_INDEX), str(args.threshold_time))
 
-    fragments.append(")")
-
-    return " ".join(fragments)
+    #print(sql)
+    return sql
 
 
 def main():
