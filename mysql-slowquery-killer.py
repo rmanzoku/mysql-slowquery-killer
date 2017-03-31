@@ -104,7 +104,8 @@ def create_db_connection(host, user, password, db):
         user=user,
         passwd=password,
         db=db,
-        cursorclass=MySQLdb.cursors.DictCursor
+        cursorclass=MySQLdb.cursors.DictCursor,
+        use_unicode=True
     )
 
     return connector
