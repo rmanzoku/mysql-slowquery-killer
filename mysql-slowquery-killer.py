@@ -25,7 +25,7 @@ def create_sql(args):
     )
     """.format(str(T_TIME_STATISTICS), str(T_TIME_CREATING_SORT_INDEX), str(args.threshold_time))
 
-    #print(sql)
+    # print(sql)
     return sql
 
 
@@ -124,6 +124,9 @@ def define_parsers():
 
     parser.add_argument('-p', '--passwd', type=str, default=os.environ.get('MYSQL_PWD', ""),
                         help='MySQL password. default: MYSQL_PWD enviroment value')
+
+    parser.add_argument('--charset', type=str, default="utf8mb4",
+                        help='set_client_charset. default: utf8mb4')
 
     parser.add_argument('-t', '--threshold-time', type=int, default=300,
                         help='Threthold time')
