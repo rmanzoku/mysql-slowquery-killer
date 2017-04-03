@@ -6,6 +6,9 @@ import MySQLdb
 import MySQLdb.cursors
 from datetime import datetime
 from time import sleep
+from warnings import filterwarnings
+
+filterwarnings('ignore', category=MySQLdb.Warning)
 
 # Threshold time per state
 T_TIME_STATISTICS = 20
