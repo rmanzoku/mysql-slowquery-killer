@@ -6,9 +6,9 @@ import MySQLdb
 import MySQLdb.cursors
 from datetime import datetime
 from time import sleep
-from warnings import filterwarnings
+# from warnings import filterwarnings
 
-filterwarnings('ignore', category=MySQLdb.Warning)
+# filterwarnings('ignore', category=MySQLdb.Warning)
 
 # Threshold time per state
 T_TIME_STATISTICS = 20
@@ -35,7 +35,7 @@ def create_sql(args):
 def main():
     args = define_parsers()
     db = "INFORMATION_SCHEMA"
-    conn = create_db_connection(args.host, args.user, args.passwd, db)
+    conn = create_db_connection(args.host, args.user, args.passwd, db, args.charset)
 
     sql = create_sql(args)
 
@@ -100,7 +100,7 @@ def query_killer(row, conn, args):
     return log
 
 
-def create_db_connection(host, user, password, db):
+def create_db_connection(host, user, password, db, charset):
 
     connector = MySQLdb.connect(
         host=host,
@@ -108,7 +108,7 @@ def create_db_connection(host, user, password, db):
         passwd=password,
         db=db,
         cursorclass=MySQLdb.cursors.DictCursor,
-        use_unicode=True
+        charset=charset
     )
 
     return connector
