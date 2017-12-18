@@ -1,14 +1,15 @@
 #!/usr/bin/env python3
 import os
+import sys
 import argparse
 import json
 import MySQLdb
 import MySQLdb.cursors
 from datetime import datetime
 from time import sleep
-# from warnings import filterwarnings
+from warnings import filterwarnings
 
-# filterwarnings('ignore', category=MySQLdb.Warning)
+filterwarnings('ignore', category=MySQLdb.Warning)
 
 # Threshold time per state
 T_TIME_STATISTICS = 20
@@ -64,7 +65,10 @@ def main():
 
 
 def query_killer(row, conn, args):
-    kill_query = "KILL " + str(row['ID'])
+    if args.rds:
+        kill_query = "CALL mysql.rds_kill(%s)".format(str(row['ID']))
+    else:
+        kill_query = "KILL " + str(row['ID'])
 
     log = {
         "kill_query": kill_query,
@@ -95,6 +99,8 @@ def query_killer(row, conn, args):
             log["result"] = "Killed"
 
         except:
+            import traceback
+            traceback.print_exc()
             log["result"] = "Failed"
 
     return log
@@ -127,6 +133,9 @@ def define_parsers():
 
     parser.add_argument('-p', '--passwd', type=str, default=os.environ.get('MYSQL_PWD', ""),
                         help='MySQL password. default: MYSQL_PWD enviroment value')
+
+    parser.add_argument('--rds', dest='rds', action='store_true',
+                        help='Use "CALL mysql.rds_kill() instead of KILL')
 
     parser.add_argument('--charset', type=str, default="utf8mb4",
                         help='set_client_charset. default: utf8mb4')
