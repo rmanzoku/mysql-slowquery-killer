@@ -66,7 +66,7 @@ def main():
 
 def query_killer(row, conn, args):
     if args.rds:
-        kill_query = "CALL mysql.rds_kill(%s)".format(str(row['ID']))
+        kill_query = "CALL mysql.rds_kill({0})".format(str(row['ID']))
     else:
         kill_query = "KILL " + str(row['ID'])
 
