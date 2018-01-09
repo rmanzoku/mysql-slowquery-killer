@@ -24,8 +24,8 @@ def create_sql(args):
     AND (
     (TIME > {0} AND STATE like 'statistics%') OR
     (TIME > {1} AND STATE = 'Creating sort index') OR
-    (TIME > {2} AND STATE = 'Sending%') OR
-    (TIME > {2} AND STATE = 'Copying%')
+    (TIME > {2} AND STATE like 'Sending%') OR
+    (TIME > {2} AND STATE like 'Copying%')
     )
     """.format(str(T_TIME_STATISTICS), str(T_TIME_CREATING_SORT_INDEX), str(args.threshold_time))
 
